@@ -1,0 +1,17 @@
+{
+	"homeEmperor":"nikos",
+    "homeUnits": {
+        "Archer":20,
+        "Knight": 5,
+        "Mage": 10
+      },
+    "awayEmperor":"kosni",
+	"awayUnits": {
+		"Archer":20,
+		"Knight": 5,
+		"Mage": 10
+      }		
+    
+	}
+	
+

@@ -1,0 +1,13 @@
+db.createUser(
+  {
+    user: "nick",
+    pwd: "nick",
+    roles: [ { role: "readWrite", db: "TBU" } ]
+  }
+)
+
+db.grantRolesToUser(
+   "nick",
+   [ "readWrite" , { role: "readWrite", db: "TBU" } ],
+   { w: "majority" , wtimeout: 4000 }
+);
