@@ -22,7 +22,7 @@ public class BattleDeclarationGenerator {
   @Autowired
   FeignTBUClient feign;
 
-  @Scheduled(fixedRate = 10000)
+  @Scheduled(fixedRate = 60000)
   public void generateBattles() {
 
     for (int i = 0; i <= 29; i++) {

@@ -31,8 +31,7 @@ public class WebController {
 
   @GetMapping("/battles")
   private Flux<HistoricMongoRecord> getBattlesReactive() {
-      Flux<HistoricMongoRecord> flux = reactiveRepository.findAll();
-      return flux;
+    return reactiveRepository.findAll();
   }
   
   @GetMapping("/battles/normal")
