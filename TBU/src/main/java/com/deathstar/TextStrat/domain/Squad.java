@@ -1,9 +1,8 @@
-package com.deathstar.domain;
+package com.deathstar.TextStrat.domain;
 
+public class Squad {
 
-public class Unit {
-
-    private String unitName;
+    private String squadName;
     private int hp;
     private int maxHp;
     private int physicalAtt;
@@ -13,17 +12,19 @@ public class Unit {
     private int heal;
     private int squadSize;
     private int squadHitRange;
+    private boolean hasAttacked;
 
     private String owner;
 
-    public Unit() { }
-
-    public String getUnitName() {
-        return unitName;
+    public Squad() {
     }
 
-    public void setUnitName(String unitName) {
-        this.unitName = unitName;
+    public String getSquadName() {
+        return squadName;
+    }
+
+    public void setSquadName(String squadName) {
+        this.squadName = squadName;
     }
 
     public int getHp() {
@@ -34,13 +35,9 @@ public class Unit {
         this.hp = hp;
     }
 
-    public int getMaxHp() {
-        return maxHp;
-    }
+    public int getMaxHp() { return maxHp; }
 
-    public void setMaxHp(int maxHp) {
-        this.maxHp = maxHp;
-    }
+    public void setMaxHp(int maxHp) { this.maxHp = maxHp; }
 
     public int getPhysicalAtt() {
         return physicalAtt;
@@ -90,14 +87,6 @@ public class Unit {
         this.squadSize = squadSize;
     }
 
-    public int getSquadHitRange() {
-        return squadHitRange;
-    }
-
-    public void setSquadHitRange(int squadHitRange) {
-        this.squadHitRange = squadHitRange;
-    }
-
     public String getOwner() {
         return owner;
     }
@@ -105,4 +94,12 @@ public class Unit {
     public void setOwner(String owner) {
         this.owner = owner;
     }
+
+    public int getSquadHitRange() { return squadHitRange; }
+
+    public void setSquadHitRange(int squadHitRange) { this.squadHitRange = squadHitRange; }
+
+    public boolean hasAttacked() { return hasAttacked; }
+
+    public void setHasAttacked(boolean hasAttacked) { this.hasAttacked = hasAttacked; }
 }

@@ -7,24 +7,10 @@ import com.deathstar.domain.Unit;
 public class Emperor {
 
 	private String name;
-	private int armySize;
-	private List<Unit> units = new ArrayList<>();
+	private List<Squad> squads = new ArrayList<>();
+	private int squadSize;
 
-	public Emperor() {
-		super();
-	}
-
-	public Emperor(String name) {
-		this.name = name;
-	}
-
-	public List<Unit> getUnits() {
-		return units;
-	}
-
-	public void setUnits(List<Unit> units) {
-		this.units = units;
-	}
+	public Emperor() { }
 
 	public String getName() {
 		return name;
@@ -34,12 +20,19 @@ public class Emperor {
 		this.name = name;
 	}
 
-    public int getArmySize() {
-      return armySize;
-    }
-  
-    public void setArmySize(int armySize) {
-      this.armySize = armySize;
-    }
+	public List<Squad> getSquads() {
+		return squads;
+	}
 
+	public void setSquads(List<Squad> squads) {
+		this.squads = squads;
+	}
+
+	public int getSquadSize() {
+		return squadSize;
+	}
+
+	public void setSquadSize(int squadSize) {
+		this.squadSize = squadSize;
+	}
 }

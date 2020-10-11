@@ -1,21 +1,19 @@
 package com.deathstar.domain;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
+import com.deathstar.domain.Unit;
+
 import javax.persistence.Entity;
+import java.util.List;
 
 @Entity
-public class EmperorDTO implements Serializable {
-
-  private static final long serialVersionUID = 1L;
+public class EmperorDTO {
 
   String name;
-  List<Unit> unitList;
-  Map<String, Integer> units;
-  
-  public EmperorDTO() {
-    super();
+  List<String> units;
+
+  public EmperorDTO(String name, List<String> units) {
+    this.name = name;
+    this.units = units;
   }
 
   public String getName() {
@@ -26,25 +24,12 @@ public class EmperorDTO implements Serializable {
     this.name = name;
   }
 
-  public Map<String, Integer> getUnits() {
+  public List<String> getUnits() {
     return units;
   }
 
-  public void setUnits(Map<String, Integer> units) {
+  public void setUnits(List<String> units) {
     this.units = units;
   }
-
-  public List<Unit> getUnitList() {
-    return unitList;
-  }
-
-  public void setUnitList(List<Unit> unitList) {
-    this.unitList = unitList;
-  }
-
-  @Override
-  public String toString() {
-    return "EmperorDTO [name=" + name + ", units=" + units + "]";
-  }
-
 }
+
