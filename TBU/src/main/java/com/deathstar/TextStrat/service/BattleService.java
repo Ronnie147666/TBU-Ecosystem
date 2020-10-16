@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.deathstar.domain.BattleResult;
 import com.deathstar.domain.Squad;
 import org.springframework.stereotype.Service;
 import com.deathstar.domain.Emperor;
@@ -14,31 +15,39 @@ import com.deathstar.domain.Emperor;
 public class BattleService {
 
     public void attack(Squad squad, List<Squad> enemySquads) {
-        getAttackTarget(enemySquads, squad.getSquadHitRange()).forEach(
+        getAttackTarget(enemySquads, squad.getSquadHitRange(), "health").forEach(
                 t -> {
                     t.setHp(t.getHp() -
-                            (squad.getPhysicalAtt() - t.getPhysicalDef()) +
-                            (squad.getMagicAtt() - t.getMagicDef())
+                            (Math.max(squad.getPhysicalAtt() - t.getPhysicalDef(), 0)) -
+                            (Math.max(squad.getMagicAtt() - t.getMagicDef(), 0))
                     );
-
                     if (t.getHp() <= 0) enemySquads.remove(t);
+                    updateSquadStats(t);
                 }
         );
+        squad.setHasAttacked(true);
     }
 
-    public List<Squad> getAttackTarget(List<Squad> squadList, long squadHitRange)  {
-        return squadList.stream().limit(squadHitRange).sorted(Comparator.comparing(Squad::getHp)).collect(Collectors.toList());
+    public List<Squad> getAttackTarget(List<Squad> squadList, long squadHitRange, String statPriority)  {
+        return squadList.stream().limit(squadHitRange).sorted(UnitService.getStatComparator().get(statPriority)).collect(Collectors.toList());
+    }
+
+    private void heal(Squad squad, List<Squad> friendlySquads) {
+        getHealTarget(friendlySquads, squad.getSquadHitRange()).forEach(
+                t -> {
+                    int postHealHp = t.getHp() + squad.getHeal();
+                    t.setHp(Math.min(postHealHp, t.getMaxHp()));
+                }
+        );
     }
 
     public List<Squad> getHealTarget(List<Squad> squadList, long squadHitRange)  {
         return squadList.stream().limit(squadHitRange).sorted(Comparator.comparing(Squad::getHp).reversed()).collect(Collectors.toList());
     }
 
-    public Map<String, String> createBattle(Emperor home, Emperor away) {
+    public BattleResult createBattle(Emperor home, Emperor away) {
 
-        Map<String, String> battleResults = new HashMap<>();
-
-        int turns = 0;
+        int turns = 1;
 
         while (!home.getSquads().isEmpty() && !away.getSquads().isEmpty()) {
 
@@ -50,8 +59,10 @@ public class BattleService {
                     e.printStackTrace();
                 }
             });
+            int finalTurns = turns;
             away.getSquads().stream().filter(s -> !s.hasAttacked()).findFirst().ifPresent(squad -> {
                 try {
+                    if (finalTurns ==1) attack(squad, home.getSquads());
                     attack(squad, home.getSquads());
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -73,23 +84,46 @@ public class BattleService {
                     e.printStackTrace();
                 }
             });
+            resetAttackBoolean(home);
+            resetAttackBoolean(away);
         turns++;
+        if (turns == 100) break;
         }
 
-        battleResults.put("turns", String.valueOf(turns));
+       return getResults(home, away, turns);
 
-        if (home.getSquads().isEmpty()) { battleResults.put("winner", away.getName()); }
-        else { battleResults.put("winner", home.getName()); }
 
-        return battleResults;
     }
 
-    private void heal(Squad squad, List<Squad> friendlySquads) {
-        getHealTarget(friendlySquads, squad.getSquadHitRange()).forEach(
-                t -> {
-                    int postHealHp = t.getHp() + squad.getHeal();
-                    t.setHp(Math.min(postHealHp, t.getMaxHp()));
-                }
-        );
+    private void resetAttackBoolean(Emperor emperor) {
+        if (emperor.getSquads().stream().allMatch(Squad::hasAttacked)){
+            emperor.getSquads().forEach(s -> s.setHasAttacked(false));
+        }
+    }
+
+    private void updateSquadStats(Squad squad) {
+        int remainingUnits = (int) Math.ceil((double) squad.getHp() / squad.getUnit().getHp());
+        squad.setPhysicalAtt(remainingUnits * squad.getUnit().getPhysicalAtt());
+        squad.setMagicAtt(remainingUnits * squad.getUnit().getMagicAtt());
+        squad.setMagicAtt(remainingUnits * squad.getUnit().getHeal());
+    }
+
+    private BattleResult getResults(Emperor home, Emperor away, int turns) {
+        BattleResult battleResult = new BattleResult();
+        if (home.getSquads().isEmpty()) {
+            battleResult.setWinner("away");
+            battleResult.setWinningSquad(away.getSquads());
+            battleResult.setWinnerStatPriority(home.getStatPriority());
+            battleResult.setLoserStatPriority(away.getStatPriority());
+        } else {
+            battleResult.setWinner("home");
+            battleResult.setWinningSquad(home.getSquads());
+            battleResult.setWinnerStatPriority(away.getStatPriority());
+            battleResult.setLoserStatPriority(home.getStatPriority());
+
+        }
+        battleResult.setTurns(turns);
+
+        return battleResult;
     }
 }

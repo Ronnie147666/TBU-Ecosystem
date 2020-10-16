@@ -6,8 +6,10 @@ public class BattleDeclarationNew {
 
     private EmperorDTO homeEmperor;
     private EmperorDTO awayEmperor;
+    private BattleType battleType;
 
-    public BattleDeclarationNew() { }
+    public BattleDeclarationNew() {
+    }
 
     public BattleDeclarationNew(EmperorDTO homeEmperor, EmperorDTO awayEmperor) {
         this.homeEmperor = homeEmperor;
@@ -28,5 +30,18 @@ public class BattleDeclarationNew {
 
     public void setAwayEmperor(EmperorDTO awayEmperor) {
         this.awayEmperor = awayEmperor;
+    }
+
+    public BattleType getBattleType() { return battleType; }
+
+    public void setBattleType(BattleType battleType) { this.battleType = battleType; }
+
+    @Override
+    public String toString() {
+        return "BattleDeclarationNew{" +
+                "homeEmperor=" + homeEmperor +
+                ", awayEmperor=" + awayEmperor +
+                ", battleType=" + battleType +
+                '}';
     }
 }

@@ -13,6 +13,8 @@ public class Squad {
     private int squadSize;
     private int squadHitRange;
     private boolean hasAttacked;
+    private StatPriority statPriority;
+    private Unit unit;
 
     private String owner;
 
@@ -102,4 +104,12 @@ public class Squad {
     public boolean hasAttacked() { return hasAttacked; }
 
     public void setHasAttacked(boolean hasAttacked) { this.hasAttacked = hasAttacked; }
+
+    public Unit getUnit() { return unit; }
+
+    public void setUnit(Unit unit) { this.unit = unit; }
+
+    public StatPriority getStatPriority() { return statPriority; }
+
+    public void setStatPriority(StatPriority statPriority) { this.statPriority = statPriority; }
 }

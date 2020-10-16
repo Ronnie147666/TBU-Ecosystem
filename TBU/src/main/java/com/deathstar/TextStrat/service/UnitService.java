@@ -38,12 +38,17 @@ public class UnitService {
         Squad squad = new Squad();
 
         squad.setHp(unit.getSquadSize() * unit.getHp());
+        squad.setMaxHp(unit.getSquadSize() * unit.getHp());
         squad.setPhysicalAtt(unit.getSquadSize() * unit.getPhysicalAtt());
         squad.setMagicAtt(unit.getSquadSize() * unit.getMagicAtt());
         squad.setPhysicalDef(unit.getPhysicalDef());
         squad.setMagicDef(unit.getMagicDef());
         squad.setHeal(unit.getSquadSize() * unit.getHeal());
+        squad.setSquadSize(unit.getSquadSize());
+        squad.setSquadHitRange(unit.getSquadHitRange());
+        squad.setHasAttacked(false);
         squad.setOwner(unit.getOwner());
+        squad.setUnit(unit);
 
         squad.setSquadName(unit.getUnitName() + " " + squadIndex);
 
@@ -81,7 +86,7 @@ public class UnitService {
     public List<Squad> prepareSquads(EmperorDTO emperorDTO) {
         List<Squad> squads = new ArrayList<>();
 
-        AtomicInteger squadIndex = new AtomicInteger();
+        AtomicInteger squadIndex = new AtomicInteger(1);
 
         emperorDTO.getUnits().forEach(u -> {
             try {
@@ -92,5 +97,18 @@ public class UnitService {
         });
 
         return squads;
+    }
+
+    static public Map<String, Comparator<Squad>> getStatComparator() {
+
+        Map<String, Comparator<Squad>> statComparator= new HashMap<>();
+        statComparator.put("health", Comparator.comparingInt(Squad::getHp));
+        statComparator.put("pAttack", Comparator.comparingInt(Squad::getPhysicalAtt));
+        statComparator.put("mAttack", Comparator.comparingInt(Squad::getMagicAtt));
+        statComparator.put("pDefense", Comparator.comparingInt(Squad::getPhysicalDef));
+        statComparator.put("mDefense", Comparator.comparingInt(Squad::getMagicDef));
+        statComparator.put("heal", Comparator.comparingInt(Squad::getHeal));
+
+        return statComparator;
     }
 }

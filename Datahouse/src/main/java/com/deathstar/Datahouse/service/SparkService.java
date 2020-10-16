@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 
+import com.deathstar.Datahouse.domain.mongo.aggregation.AggregationScripts;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -27,11 +28,12 @@ public final class SparkService {
 
   static Map<String, Double> percentageMap = new HashMap<>();
   
-  public void startSpark() throws IOException {
+  public void startSparkCalculations() throws IOException {
 
     SparkSession spark = SparkSession.builder().master(networkProperties.getSparkMaster()).appName("TBUMongoSparkConnector")
-        .config("spark.mongodb.input.uri", "mongodb://"+networkProperties.getMongoAddress()+"/TBU.WarHistory")
-        .config("spark.mongodb.output.uri", "mongodb://"+networkProperties.getMongoAddress()+"/TBU.WarHistory")
+        .config("spark.mongodb.input.uri", networkProperties.getMongoUri())
+        .config("spark.mongodb.input.collection", "battle_record")
+        .config("spark.mongodb.output.uri", networkProperties.getMongoUri())
         .getOrCreate();
     
     // Create a JavaSparkContext using the SparkSession's SparkContext object
@@ -40,10 +42,9 @@ public final class SparkService {
     // Read data from MongoDB 
     JavaMongoRDD<Document> rdd = MongoSpark.load(jsc);
 
-    final List<Integer> battleMode = Arrays.asList(5, 10, 15);
-    
-    battleMode.forEach(n -> printStatistics(rdd, n));
-    
+    JavaMongoRDD<Document> mutualWinsRDD = rdd.withPipeline(
+            AggregationScripts.GET_CLASS_WINS);
+
     jsc.close();
 
   }
@@ -58,25 +59,16 @@ public final class SparkService {
     // Class wins / mutual
     
     JavaMongoRDD<Document> mutualWinsRDD = rdd.withPipeline(
-        Lists.newArrayList(
-            Document.parse(("    { $match: { battleType: \""+battleType+"\" } }")),
-            Document.parse(("    { $project: {\"winners\": {$cond: { if: { $eq: [ \"$winner\", \"home\" ] }, then: \"$homeEmperor.units\", else: \"$awayEmperor.units\"} }}  }")),
-            Document.parse(("    { $project: {\"winnerUnits\": { $objectToArray:  \"$winners\"  }}  }")),
-            Document.parse(("    { $unwind: \"$winnerUnits\" },")),
-            Document.parse(("    { $group: { _id: {unitType: \"$winnerUnits.k\"}, count:{$sum:1} }},")),
-            Document.parse(("     { $sort : { count : -1 }}"))
-            ));
+        AggregationScripts.GET_CLASS_WINS);
 
     // Class participation / mutual
     
     JavaMongoRDD<Document> mutualParticipationsRDD = rdd.withPipeline(
         Lists.newArrayList(
-            Document.parse(("    { $match: { battleType: \""+battleType+"\" } }")),
-            Document.parse(("    { $project: { \"participants\": { $mergeObjects: [ \"$homeEmperor.units\", \"$awayEmperor.units\" ] } } },")),
-            Document.parse(("    { $project: {\"participantUnits\": { $objectToArray:  \"$participants\"  }}  },")),
-            Document.parse(("    { $unwind: \"$participantUnits\" },")),
-            Document.parse(("    { $group: { _id: {unitType: \"$participantUnits.k\"}, count:{$sum:1} }},")),
-            Document.parse(("    { $sort : { count : -1 }}"))
+            Document.parse(("{ $project: { \"battleSquad\":1 } },")),
+            Document.parse(("{ $unwind: \"$battleSquad\" },")),
+            Document.parse(("{ $group: { _id: \"$battleSquad\", count:{$sum:1} }},")),
+            Document.parse(("{ $sort : { count : -1 }}"))
             ));    
     
     
