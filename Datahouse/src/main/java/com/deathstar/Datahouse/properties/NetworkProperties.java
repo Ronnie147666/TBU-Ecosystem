@@ -7,7 +7,7 @@ public class NetworkProperties {
 
   private String kafkaAddress;
   
-  private String mongoAddress;
+  private String mongoUri;
 
   private String sparkMaster;
   
@@ -19,13 +19,9 @@ public class NetworkProperties {
     this.kafkaAddress = kafkaAddress;
   }
 
-  public String getMongoAddress() {
-    return mongoAddress;
-  }
+  public String getMongoUri() { return mongoUri; }
 
-  public void setMongoAddress(String mongoAddress) {
-    this.mongoAddress = mongoAddress;
-  }
+  public void setMongoUri(String mongoUri) { this.mongoUri = mongoUri; }
 
   public String getSparkMaster() {
     return sparkMaster;

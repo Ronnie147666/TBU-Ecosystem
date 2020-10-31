@@ -2,6 +2,8 @@ package com.deathstar.TextStrat.config.kafka;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import com.deathstar.domain.BattleRecord;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,19 +39,19 @@ public class KafkaProducerConfig {
 	
 	
 	@Bean
-	public ProducerFactory<String, HistoricRecordDTO> historyProducerFactory() {
+	public ProducerFactory<String, BattleRecord> producerFactory() {
 		Map<String, Object> configProps = new HashMap<>();
 		configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, networkProperties.getKafkaAddress());
 		configProps.put(ProducerConfig.MAX_BLOCK_MS_CONFIG, "100");
 		configProps.put(ProducerConfig.RECONNECT_BACKOFF_MAX_MS_CONFIG, "50000");
 		configProps.put(ProducerConfig.RECONNECT_BACKOFF_MS_CONFIG, "50000");
 		return new DefaultKafkaProducerFactory<>(configProps, new StringSerializer(),
-				new JsonSerializer<HistoricRecordDTO>(kafkaMapper));
+				new JsonSerializer<BattleRecord>(kafkaMapper));
 	}
 
 	@Bean
-	public KafkaTemplate<String, HistoricRecordDTO> historicKafkaTemplate() {
-		return new KafkaTemplate<>(historyProducerFactory());
+	public KafkaTemplate<String, BattleRecord> kafkaTemplate() {
+		return new KafkaTemplate<>(producerFactory());
 	}
 
 

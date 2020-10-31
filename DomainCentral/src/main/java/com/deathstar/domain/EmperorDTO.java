@@ -1,50 +1,57 @@
 package com.deathstar.domain;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
+import com.deathstar.domain.Unit;
+
 import javax.persistence.Entity;
+import java.util.List;
 
 @Entity
-public class EmperorDTO implements Serializable {
+public class EmperorDTO {
 
-  private static final long serialVersionUID = 1L;
+    private String name;
+    private List<String> units;
+    private StatPriority statPriority;
 
-  String name;
-  List<Unit> unitList;
-  Map<String, Integer> units;
-  
-  public EmperorDTO() {
-    super();
-  }
+    public EmperorDTO(String name, List<String> units, StatPriority statPriority) {
+        this.name = name;
+        this.units = units;
+        this.statPriority = statPriority;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public EmperorDTO() {
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public Map<String, Integer> getUnits() {
-    return units;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public void setUnits(Map<String, Integer> units) {
-    this.units = units;
-  }
+    public List<String> getUnits() {
+        return units;
+    }
 
-  public List<Unit> getUnitList() {
-    return unitList;
-  }
+    public void setUnits(List<String> units) {
+        this.units = units;
+    }
 
-  public void setUnitList(List<Unit> unitList) {
-    this.unitList = unitList;
-  }
+    public StatPriority getStatPriority() {
+        return statPriority;
+    }
 
-  @Override
-  public String toString() {
-    return "EmperorDTO [name=" + name + ", units=" + units + "]";
-  }
+    public void setStatPriority(StatPriority statPriority) {
+        this.statPriority = statPriority;
+    }
 
+    @Override
+    public String toString() {
+        return "EmperorDTO{" +
+                "name='" + name + '\'' +
+                ", units=" + units +
+                ", statPriority=" + statPriority +
+                '}';
+    }
 }
+

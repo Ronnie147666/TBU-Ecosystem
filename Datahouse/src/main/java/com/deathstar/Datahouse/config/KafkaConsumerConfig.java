@@ -3,6 +3,8 @@ package com.deathstar.Datahouse.config;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.deathstar.domain.BattleRecord;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,6 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
-import com.deathstar.Datahouse.domain.mongo.HistoricMongoRecord;
 import com.deathstar.Datahouse.properties.NetworkProperties;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
@@ -30,9 +31,9 @@ public class KafkaConsumerConfig {
     NetworkProperties networkProperties;
   
 	@Bean
-	public ConsumerFactory<String, HistoricMongoRecord> historicConsumerFactory() {
+	public ConsumerFactory<String, BattleRecord> consumerFactory() {
 		Map<String, Object> props = new HashMap<>();
-		JsonDeserializer<HistoricMongoRecord> deserializer = new JsonDeserializer<>(kafkaMapper);
+		JsonDeserializer<BattleRecord> deserializer = new JsonDeserializer<>(kafkaMapper);
 		deserializer.configure(Collections.singletonMap(JsonDeserializer.TRUSTED_PACKAGES, "*"), false);
 		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, networkProperties.getKafkaAddress());
 		props.put(ConsumerConfig.GROUP_ID_CONFIG, "TBU");
@@ -41,10 +42,10 @@ public class KafkaConsumerConfig {
 	}
 
 	@Bean
-	public ConcurrentKafkaListenerContainerFactory<String, HistoricMongoRecord> kafkaListenerContainerFactory() {
+	public ConcurrentKafkaListenerContainerFactory<String, BattleRecord> kafkaListenerContainerFactory() {
 
-		ConcurrentKafkaListenerContainerFactory<String, HistoricMongoRecord> factory = new ConcurrentKafkaListenerContainerFactory<>();
-		factory.setConsumerFactory(historicConsumerFactory());
+		ConcurrentKafkaListenerContainerFactory<String, BattleRecord> factory = new ConcurrentKafkaListenerContainerFactory<>();
+		factory.setConsumerFactory(consumerFactory());
 		return factory;
 	}
 	

@@ -1,7 +1,7 @@
 package com.deathstar.TextStrat.service;
 
 
-public class BoardService {
+public class PrintService {
 
 	
 	public static final String ANSI_RESET = "\u001B[0m";
