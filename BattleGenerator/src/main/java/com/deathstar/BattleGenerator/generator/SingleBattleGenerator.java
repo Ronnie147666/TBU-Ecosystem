@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
 import com.deathstar.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,11 +24,12 @@ public class SingleBattleGenerator {
     @Scheduled(fixedRate = 10000)
     public void generateSingleBattle() {
 
+        BattleType randomBattleType = BattleType.getRandomSingleBattleType();
 
-        List<Integer> randomNumbers = IntStream.rangeClosed(1, 36).boxed().collect(Collectors.toList());
+        List<Integer> randomNumbers = IntStream.rangeClosed(1, 37).boxed().collect(Collectors.toList());
         Collections.shuffle(randomNumbers);
 
-        BattleDeclarationNew declaration = new BattleDeclarationNew();
+        BattleDeclaration declaration = new BattleDeclaration();
 
       /*
       Create home Emperor
@@ -39,9 +38,9 @@ public class SingleBattleGenerator {
 
         List<String> homeUnits = new ArrayList<>();
 
-        List<Integer> homeDraw = randomNumbers.stream().limit(5).collect(Collectors.toList());
+        List<Integer> homeDraw = randomNumbers.stream().limit(randomBattleType.getNumber()).collect(Collectors.toList());
 
-        for (int i = 0; i < 5; i++){
+        for (int i = 0; i < randomBattleType.getNumber(); i++){
             homeUnits.add(RandomUnitGenerator.getUnit(homeDraw.get(i)));
         }
         homeEmperor.setName("Lord");
@@ -57,9 +56,9 @@ public class SingleBattleGenerator {
 
         List<String> awayUnits = new ArrayList<>();
 
-        List<Integer> awayDraw = randomNumbers.stream().skip(5).limit(5).collect(Collectors.toList());
+        List<Integer> awayDraw = randomNumbers.stream().skip(randomBattleType.getNumber()).limit(randomBattleType.getNumber()).collect(Collectors.toList());
 
-        for (int i = 0; i < 5; i++){
+        for (int i = 0; i < randomBattleType.getNumber(); i++){
             awayUnits.add(RandomUnitGenerator.getUnit(awayDraw.get(i)));
         }
         awayEmperor.setName("King");
@@ -68,7 +67,7 @@ public class SingleBattleGenerator {
 
         declaration.setAwayEmperor(awayEmperor);
 
-        declaration.setBattleType(BattleType.SINGLE_FIVE);
+        declaration.setBattleType(randomBattleType);
 
         LOGGER.info("Created a Single Battle Declaration");
 

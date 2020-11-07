@@ -1,19 +1,17 @@
 package com.deathstar.Datahouse.domain.mongo;
 
-import java.time.LocalDate;
-import java.util.List;
-
 import com.deathstar.domain.BattleType;
 import com.deathstar.domain.Squad;
 import com.deathstar.domain.StatPriority;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.deathstar.domain.EmperorDTO;
+import java.time.LocalDate;
+import java.util.List;
 
 
-@Document("battle_record")
-public class BattleRecordMongo {
+@Document("multi_battle_record")
+public class MultiBattleRecordMongo {
 
     @Id
     String id;
@@ -25,7 +23,7 @@ public class BattleRecordMongo {
     LocalDate dateCreated;
     BattleType battleType;
 
-    public BattleRecordMongo() {
+    public MultiBattleRecordMongo() {
     }
 
     public List<String> getWinningSquad() {

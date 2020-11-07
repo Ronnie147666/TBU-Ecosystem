@@ -4,12 +4,20 @@ package com.deathstar.domain;
 public class Unit {
 
     private String unitName;
-    private int hp;
-    private int maxHp;
+    private int health;
+    private int maxHealth;
     private int physicalAtt;
     private int magicAtt;
+    private int fireAtt;
+    private int frostAtt;
+    private int natureAtt;
+    private int shadowAtt;
     private int physicalDef;
     private int magicDef;
+    private int fireDef;
+    private int frostDef;
+    private int natureDef;
+    private int shadowDef;
     private int heal;
     private int squadSize;
     private int squadHitRange;
@@ -26,20 +34,20 @@ public class Unit {
         this.unitName = unitName;
     }
 
-    public int getHp() {
-        return hp;
+    public int getHealth() {
+        return health;
     }
 
-    public void setHp(int hp) {
-        this.hp = hp;
+    public void setHealth(int health) {
+        this.health = health;
     }
 
-    public int getMaxHp() {
-        return maxHp;
+    public int getMaxHealth() {
+        return maxHealth;
     }
 
-    public void setMaxHp(int maxHp) {
-        this.maxHp = maxHp;
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
     }
 
     public int getPhysicalAtt() {
@@ -58,6 +66,38 @@ public class Unit {
         this.magicAtt = magicAtt;
     }
 
+    public int getFireAtt() {
+        return fireAtt;
+    }
+
+    public void setFireAtt(int fireAtt) {
+        this.fireAtt = fireAtt;
+    }
+
+    public int getFrostAtt() {
+        return frostAtt;
+    }
+
+    public void setFrostAtt(int frostAtt) {
+        this.frostAtt = frostAtt;
+    }
+
+    public int getNatureAtt() {
+        return natureAtt;
+    }
+
+    public void setNatureAtt(int natureAtt) {
+        this.natureAtt = natureAtt;
+    }
+
+    public int getShadowAtt() {
+        return shadowAtt;
+    }
+
+    public void setShadowAtt(int shadowAtt) {
+        this.shadowAtt = shadowAtt;
+    }
+
     public int getPhysicalDef() {
         return physicalDef;
     }
@@ -72,6 +112,38 @@ public class Unit {
 
     public void setMagicDef(int magicDef) {
         this.magicDef = magicDef;
+    }
+
+    public int getFireDef() {
+        return fireDef;
+    }
+
+    public void setFireDef(int fireDef) {
+        this.fireDef = fireDef;
+    }
+
+    public int getFrostDef() {
+        return frostDef;
+    }
+
+    public void setFrostDef(int frostDef) {
+        this.frostDef = frostDef;
+    }
+
+    public int getNatureDef() {
+        return natureDef;
+    }
+
+    public void setNatureDef(int natureDef) {
+        this.natureDef = natureDef;
+    }
+
+    public int getShadowDef() {
+        return shadowDef;
+    }
+
+    public void setShadowDef(int shadowDef) {
+        this.shadowDef = shadowDef;
     }
 
     public int getHeal() {

@@ -1,68 +1,47 @@
 package com.deathstar.domain;
 
-import java.util.Map;
+import com.deathstar.domain.EmperorDTO;
 
 public class BattleDeclaration {
 
-	String homeEmperor;
-	Map<String, Integer> homeUnits;
+    private EmperorDTO homeEmperor;
+    private EmperorDTO awayEmperor;
+    private BattleType battleType;
 
-	String awayEmperor;
-	Map<String, Integer> awayUnits;
+    public BattleDeclaration() {
+    }
 
-	
-	
-	public BattleDeclaration() {
-		super();
-	}
+    public BattleDeclaration(EmperorDTO homeEmperor, EmperorDTO awayEmperor) {
+        this.homeEmperor = homeEmperor;
+        this.awayEmperor = awayEmperor;
+    }
 
-	public BattleDeclaration(String homeEmperor, Map<String, Integer> homeUnits, String awayEmperor,
-			Map<String, Integer> awayUnits) {
-		super();
-		this.homeEmperor = homeEmperor;
-		this.homeUnits = homeUnits;
-		this.awayEmperor = awayEmperor;
-		this.awayUnits = awayUnits;
-	}
+    public EmperorDTO getHomeEmperor() {
+        return homeEmperor;
+    }
 
-	public String getHomeEmperor() {
-		return homeEmperor;
-	}
+    public void setHomeEmperor(EmperorDTO homeEmperor) {
+        this.homeEmperor = homeEmperor;
+    }
 
-	public void setHomeEmperor(String homeEmperor) {
-		this.homeEmperor = homeEmperor;
-	}
+    public EmperorDTO getAwayEmperor() {
+        return awayEmperor;
+    }
 
-	public Map<String, Integer> getHomeUnits() {
-		return homeUnits;
-	}
+    public void setAwayEmperor(EmperorDTO awayEmperor) {
+        this.awayEmperor = awayEmperor;
+    }
 
-	public void setHomeUnits(Map<String, Integer> homeUnits) {
-		this.homeUnits = homeUnits;
-	}
+    public BattleType getBattleType() { return battleType; }
 
-	public String getAwayEmperor() {
-		return awayEmperor;
-	}
+    public void setBattleType(BattleType battleType) { this.battleType = battleType; }
 
-	public void setAwayEmperor(String awayEmperor) {
-		this.awayEmperor = awayEmperor;
-	}
-
-	public Map<String, Integer> getAwayUnits() {
-		return awayUnits;
-	}
-
-	public void setAwayUnits(Map<String, Integer> awayUnits) {
-		this.awayUnits = awayUnits;
-	}
-
-	@Override
-	public String toString() {
-		return "BattleDeclaration [homeEmperor=" + homeEmperor + ", homeUnits=" + homeUnits + ", awayEmperor="
-				+ awayEmperor + ", awayUnits=" + awayUnits + "]";
-	}
-	
-	
-
+    @Override
+    public String toString() {
+        return "BattleDeclaration{" +
+                "homeEmperor=" + homeEmperor +
+                ", awayEmperor=" + awayEmperor +
+                ", battleType=" + battleType +
+                '}';
+    }
 }

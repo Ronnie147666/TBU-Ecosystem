@@ -5,9 +5,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.deathstar.TextStrat.web.WebController;
 import com.deathstar.domain.*;
-import com.netflix.servo.util.UnmodifiableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +24,7 @@ public class WarService {
 
   private final Logger LOGGER = LoggerFactory.getLogger(WarService.class);
 
-  public BattleRecord createWar(BattleDeclarationNew battle) {
+  public BattleRecord createWar(BattleDeclaration battle) {
 
     LOGGER.info("Received battle: " + battle.toString());
 
