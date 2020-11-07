@@ -14,7 +14,7 @@ import com.deathstar.BattleGenerator.client.FeignTBUClient;
 @Service
 public class MultiBattleGenerator {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(SingleBattleGenerator.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(MultiBattleGenerator.class);
 
     @Autowired
     FeignTBUClient feign;
@@ -23,7 +23,7 @@ public class MultiBattleGenerator {
     public void generateMultiBattle() {
 
 
-        BattleDeclarationNew declaration = new BattleDeclarationNew();
+        BattleDeclaration declaration = new BattleDeclaration();
 
       /*
       Create home Emperor

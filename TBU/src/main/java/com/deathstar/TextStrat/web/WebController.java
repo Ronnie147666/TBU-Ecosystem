@@ -1,7 +1,6 @@
 package com.deathstar.TextStrat.web;
 
 
-import com.deathstar.domain.BattleDeclarationNew;
 import com.deathstar.TextStrat.service.UnitService;
 import com.deathstar.domain.BattleRecord;
 import org.slf4j.Logger;
@@ -30,7 +29,7 @@ public class WebController {
     private final Logger LOGGER = LoggerFactory.getLogger(WebController.class);
 
     @PostMapping
-    public BattleRecord initiateBattle(@RequestBody BattleDeclarationNew battle) {
+    public BattleRecord initiateBattle(@RequestBody BattleDeclaration battle) {
         return warService.createWar(battle);
     }
 

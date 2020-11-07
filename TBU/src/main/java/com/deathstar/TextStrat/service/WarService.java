@@ -26,7 +26,7 @@ public class WarService {
 
   private final Logger LOGGER = LoggerFactory.getLogger(WarService.class);
 
-  public BattleRecord createWar(BattleDeclarationNew battle) {
+  public BattleRecord createWar(BattleDeclaration battle) {
 
     LOGGER.info("Received battle: " + battle.toString());
 

@@ -17,14 +17,14 @@ public class KafkaConsumer {
 	@Autowired
 	PersistenceService persistenceService;
 	@Autowired
-	SparkService sparkService;
+	StatsService sparkService;
 	
 	@KafkaListener(topics = "TBU", groupId = "TBU")
 	public void listen(BattleRecord record) throws IOException,ArrayStoreException {
 	    System.out.println("Received Message in group TBU: " + record.toString());
 		persistenceService.saveBattleRecord(fromMongo(record));
 //	    history.saveSQLHistory(fromSQL(record));
-	    sparkService.startSparkCalculations();
+//	    sparkService.startSparkCalculations();
 	}
 
 	private BattleRecordMongo fromMongo(BattleRecord dto) {

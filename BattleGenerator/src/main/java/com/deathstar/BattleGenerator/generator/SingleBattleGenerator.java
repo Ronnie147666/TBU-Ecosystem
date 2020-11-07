@@ -30,7 +30,7 @@ public class SingleBattleGenerator {
         List<Integer> randomNumbers = IntStream.rangeClosed(1, 36).boxed().collect(Collectors.toList());
         Collections.shuffle(randomNumbers);
 
-        BattleDeclarationNew declaration = new BattleDeclarationNew();
+        BattleDeclaration declaration = new BattleDeclaration();
 
       /*
       Create home Emperor
