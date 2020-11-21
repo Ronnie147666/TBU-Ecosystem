@@ -3,13 +3,12 @@ package com.deathstar.Datahouse.domain;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class UnitStats {
+public class SingleUnitStats {
   
   
   private String name;
   private int wins;
   private int participation;
-  private BigDecimal percentage;
 
 
   public String getName() {
@@ -38,9 +37,5 @@ public class UnitStats {
 
   public BigDecimal getPercentage() {
     return BigDecimal.valueOf(((double) this.wins / this.participation) * 100).setScale(2, RoundingMode.HALF_UP);
-  }
-
-  public void setPercentage(BigDecimal percentage) {
-    this.percentage = percentage;
   }
 }

@@ -14,20 +14,6 @@ import com.deathstar.domain.Emperor;
 @Service
 public class BattleService {
 
-//    public void attack(Squad squad, List<Squad> enemySquads) {
-//        getAttackTarget(enemySquads, squad.getSquadHitRange(), "health").forEach(
-//                t -> {
-//                    t.setHealth(t.getHealth() -
-//                            (Math.max(squad.getPhysicalAtt() - t.getPhysicalDef(), 0)) -
-//                            (Math.max(squad.getMagicAtt() - t.getMagicDef(), 0))
-//                    );
-//                    if (t.getHealth() <= 0) enemySquads.remove(t);
-//                    updateSquadStats(t);
-//                }
-//        );
-//        squad.setHasAttacked(true);
-//    }
-
     public void attack(Squad squad, List<Squad> enemySquads) {
         getAttackTarget(enemySquads, squad.getSquadHitRange(), "health").forEach(
                 t -> {

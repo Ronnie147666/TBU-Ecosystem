@@ -4,7 +4,7 @@ package com.deathstar.Datahouse.web;
 import java.io.IOException;
 import java.util.List;
 
-import com.deathstar.Datahouse.domain.UnitStats;
+import com.deathstar.Datahouse.domain.SingleUnitStats;
 import com.deathstar.Datahouse.domain.mongo.SingleBattleRecordMongo;
 import com.deathstar.Datahouse.service.StatsService;
 import com.deathstar.domain.BattleRecord;
@@ -41,9 +41,9 @@ public class WebController {
     return repository.findAll();
   }
 
-  @GetMapping("/stats")
-  private List<UnitStats> getUnitPercentages() throws IOException {
-    return statsService.getUnitStats();
+  @GetMapping("/stats/single")
+  private List<SingleUnitStats> getUnitPercentages() throws IOException {
+    return statsService.getSingleUnitStats();
   }
 
 }
