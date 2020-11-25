@@ -17,11 +17,16 @@ public class BattleService {
     public void attack(Squad squad, List<Squad> enemySquads) {
         getAttackTarget(enemySquads, squad.getSquadHitRange(), "health").forEach(
                 t -> {
-                    t.setHp(t.getHp() -
-                            (Math.max(squad.getPhysicalAtt() - t.getPhysicalDef(), 0)) -
-                            (Math.max(squad.getMagicAtt() - t.getMagicDef(), 0))
+                    t.setHealth(t.getHealth() -
+                            (squad.getPhysicalAtt() * (1 - (t.getPhysicalDef()/100))) -
+                            (squad.getMagicAtt() * (1 - (t.getMagicDef()/100))) -
+                            (squad.getFireAtt() * (1 - (t.getFireDef()/100))) -
+                            (squad.getFrostAtt() * (1 - (t.getFrostDef()/100))) -
+                            (squad.getNatureAtt() * (1 - (t.getNatureDef()/100))) -
+                            (squad.getShadowAtt() * (1 - (t.getShadowDef()/100)))
+
                     );
-                    if (t.getHp() <= 0) enemySquads.remove(t);
+                    if (t.getHealth() <= 0) enemySquads.remove(t);
                     updateSquadStats(t);
                 }
         );
@@ -35,14 +40,14 @@ public class BattleService {
     private void heal(Squad squad, List<Squad> friendlySquads) {
         getHealTarget(friendlySquads, squad.getSquadHitRange()).forEach(
                 t -> {
-                    int postHealHp = t.getHp() + squad.getHeal();
-                    t.setHp(Math.min(postHealHp, t.getMaxHp()));
+                    int postHealHp = t.getHealth() + squad.getHeal();
+                    t.setHealth(Math.min(postHealHp, t.getMaxHealth()));
                 }
         );
     }
 
     public List<Squad> getHealTarget(List<Squad> squadList, long squadHitRange)  {
-        return squadList.stream().limit(squadHitRange).sorted(Comparator.comparing(Squad::getHp).reversed()).collect(Collectors.toList());
+        return squadList.stream().limit(squadHitRange).sorted(Comparator.comparing(Squad::getHealth).reversed()).collect(Collectors.toList());
     }
 
     public BattleResult createBattle(Emperor home, Emperor away) {
@@ -102,7 +107,7 @@ public class BattleService {
     }
 
     private void updateSquadStats(Squad squad) {
-        int remainingUnits = (int) Math.ceil((double) squad.getHp() / squad.getUnit().getHp());
+        int remainingUnits = (int) Math.ceil((double) squad.getHealth() / squad.getUnit().getHealth());
         squad.setPhysicalAtt(remainingUnits * squad.getUnit().getPhysicalAtt());
         squad.setMagicAtt(remainingUnits * squad.getUnit().getMagicAtt());
         squad.setMagicAtt(remainingUnits * squad.getUnit().getHeal());

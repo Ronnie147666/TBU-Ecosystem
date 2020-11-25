@@ -4,7 +4,6 @@ import com.deathstar.BotLand.service.StatsService
 
 interface BotBehavior {
 
-//    fun getUnitStats(): Map<String, Map<String, Double>> {}
-
+    fun setupTeam()
 
 }

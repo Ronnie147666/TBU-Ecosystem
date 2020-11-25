@@ -1,13 +1,10 @@
-package com.deathstar.domain.Botland
+package com.deathstar.BotLand.domain
 
-sealed class Bot {
-    class HealthBot: Bot()
-    class WinrateBot: Bot()
-    class DefenseBot: Bot()
-    class AttackBot: Bot()
-    class MagicBot: Bot()
-}
+abstract class Bot {
 
-fun getStatsMap(): Map<String, Map<String, Double>>? {
-    return null
+
+    fun getStatsMap(): Map<String, Map<String, Double>>? {
+        return null
+    }
+
 }

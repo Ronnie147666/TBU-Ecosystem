@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.deathstar.Datahouse.domain.MultiUnitStats;
 import com.deathstar.Datahouse.domain.mongo.aggregation.AggregationScripts;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.SparkSession;
@@ -11,7 +12,7 @@ import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import com.deathstar.Datahouse.domain.UnitStats;
+import com.deathstar.Datahouse.domain.SingleUnitStats;
 import com.deathstar.Datahouse.properties.NetworkProperties;
 import com.mongodb.spark.MongoSpark;
 import com.mongodb.spark.rdd.api.java.JavaMongoRDD;
@@ -22,8 +23,8 @@ public final class StatsService {
   @Autowired
   NetworkProperties networkProperties;
 
-    public List<UnitStats> getUnitStats() throws IOException {
-        SparkSession spark = getSparkSession();
+    public List<SingleUnitStats> getSingleUnitStats() throws IOException {
+        SparkSession spark = getSparkSession("single_battle_record");
 
         // Create a JavaSparkContext using the SparkSession's SparkContext object
         JavaSparkContext jsc = new JavaSparkContext(spark.sparkContext());
@@ -32,22 +33,22 @@ public final class StatsService {
         JavaMongoRDD<Document> rdd = MongoSpark.load(jsc);
 
         List<Document> wins = rdd.withPipeline(
-                AggregationScripts.GET_CLASS_WINS).collect();
+                AggregationScripts.GET_CLASS_WINS_SINGLE).collect();
         List<Document> participations = rdd.withPipeline(
-                AggregationScripts.GET_CLASS_PARTICIPATIONS).collect();
+                AggregationScripts.GET_CLASS_PARTICIPATIONS_SINGLE).collect();
 
-        List<UnitStats> unitStats = new ArrayList<>();
+        List<SingleUnitStats> singleUnitStats = new ArrayList<>();
 
         participations.forEach(p -> {
-                    UnitStats u = new UnitStats();
+                    SingleUnitStats u = new SingleUnitStats();
                     u.setName(p.get("_id").toString());
                     u.setParticipation(Integer.parseInt(p.get("count").toString()));
-                    unitStats.add(u);
+                    singleUnitStats.add(u);
                 }
         );
 
         wins.forEach(w -> {
-                    unitStats.stream().filter(u -> u.getName().equals(w.get("_id"))).forEach(
+                    singleUnitStats.stream().filter(u -> u.getName().equals(w.get("_id"))).forEach(
                             u -> {
                                 u.setWins(Integer.parseInt(w.get("count").toString()));
                             }
@@ -57,24 +58,82 @@ public final class StatsService {
 
         jsc.close();
 
-        return unitStats;
+        return singleUnitStats;
     }
 
-    private SparkSession getSparkSession() {
+    public List<MultiUnitStats> getMultiUnitStats() throws IOException {
+        SparkSession spark = getSparkSession("multi_battle_record");
+
+        // Create a JavaSparkContext using the SparkSession's SparkContext object
+        JavaSparkContext jsc = new JavaSparkContext(spark.sparkContext());
+
+        // Read data from MongoDB
+        JavaMongoRDD<Document> rdd = MongoSpark.load(jsc);
+
+        List<Document> winPoints = rdd.withPipeline(
+                AggregationScripts.GET_CLASS_WIN_POINTS_MULTI).collect();
+        List<Document> losePoints = rdd.withPipeline(
+                AggregationScripts.GET_CLASS_LOSE_POINTS_MULTI).collect();
+        List<Document> participations = rdd.withPipeline(
+                AggregationScripts.GET_CLASS_PARTICIPATIONS_SINGLE).collect();
+
+        List<MultiUnitStats> multiUnitStats = new ArrayList<>();
+
+        participations.forEach(p -> {
+            MultiUnitStats u = new MultiUnitStats();
+                    u.setName(p.get("_id").toString());
+                    u.setParticipation(Integer.parseInt(p.get("count").toString()));
+                    multiUnitStats.add(u);
+                }
+        );
+
+        winPoints.forEach(w -> {
+            multiUnitStats.stream().filter(u -> u.getName().equals(w.get("_id"))).forEach(
+                            u -> {
+                                u.setWinPoints(Integer.parseInt(w.get("count").toString()) * 2);
+                            }
+                    );
+                }
+        );
+
+        losePoints.forEach(w -> {
+            multiUnitStats.stream().filter(u -> u.getName().equals(w.get("_id"))).forEach(
+                            u -> {
+                                u.setLosePoints(Integer.parseInt(w.get("count").toString()));
+                            }
+                    );
+                }
+        );
+
+        jsc.close();
+
+        return multiUnitStats;
+    }
+
+    private SparkSession getSparkSession(String collection) {
         return SparkSession.builder().master(networkProperties.getSparkMaster()).appName("TBUMongoSparkConnector")
             .config("spark.mongodb.input.uri", networkProperties.getMongoUri())
-            .config("spark.mongodb.input.collection", "battle_record")
+            .config("spark.mongodb.input.collection", collection)
             .config("spark.mongodb.output.uri", networkProperties.getMongoUri())
             .config("spark.mongodb.input.partitioner", "MongoSinglePartitioner")
             .getOrCreate();
     }
 
     @Scheduled(fixedRate = 60000)
-    private void printUnitStats() throws IOException {
-        List<UnitStats> unitStats = getUnitStats().stream().sorted(Comparator.comparing(UnitStats::getPercentage).reversed()).collect(Collectors.toList());
-        System.out.println("--------- Single Five ---------");
-        for (UnitStats s : unitStats) {
+    private void printSingleUnitStats() throws IOException {
+        List<SingleUnitStats> singleUnitStats = getSingleUnitStats().stream().sorted(Comparator.comparing(SingleUnitStats::getPercentage).reversed()).collect(Collectors.toList());
+        System.out.println("--------- Single ---------");
+        for (SingleUnitStats s : singleUnitStats) {
             System.out.println(s.getName()+" : "+ s.getWins()+"/"+s.getParticipation()+" ("+s.getPercentage()+"%)");
+        }
+    }
+
+    @Scheduled(fixedRate = 60000)
+    private void printMultiUnitStats() throws IOException {
+        List<MultiUnitStats> multiUnitStats = getMultiUnitStats().stream().sorted(Comparator.comparing(MultiUnitStats::getPointsPerGame).reversed()).collect(Collectors.toList());
+        System.out.println("--------- Multi ---------");
+        for (MultiUnitStats s : multiUnitStats) {
+            System.out.println(s.getName()+" : "+ s.getScore()+" P / "+s.getParticipation()+" G / "+s.getPointsPerGame()+" PPG");
         }
     }
 

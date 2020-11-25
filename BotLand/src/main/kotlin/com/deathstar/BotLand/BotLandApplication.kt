@@ -1,5 +1,6 @@
 package com.deathstar.BotLand
 
+import com.deathstar.BotLand.domain.SingleUnitStats
 import com.deathstar.BotLand.service.StatsService
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -19,7 +20,7 @@ fun main(args: Array<String>) {
 
 	val stats: StatsService = ctx.getBean(StatsService::class.java)
 	val unitStats: Map<String, Map<String, Double>> = stats.getStats()
-	val winRatios: Map<String, Double> = stats.getWinRatio()
+	val winRatios: List<SingleUnitStats> = stats.getWinRatio()
 
 	print("qq")
 }

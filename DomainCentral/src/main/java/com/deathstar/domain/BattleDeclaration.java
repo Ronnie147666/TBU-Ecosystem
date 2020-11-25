@@ -38,7 +38,7 @@ public class BattleDeclaration {
 
     @Override
     public String toString() {
-        return "BattleDeclarationNew{" +
+        return "BattleDeclaration{" +
                 "homeEmperor=" + homeEmperor +
                 ", awayEmperor=" + awayEmperor +
                 ", battleType=" + battleType +

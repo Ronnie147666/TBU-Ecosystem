@@ -2,7 +2,6 @@ package com.deathstar.BattleGenerator.generator;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.deathstar.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +18,10 @@ public class MultiBattleGenerator {
     @Autowired
     FeignTBUClient feign;
 
-//    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 10000)
     public void generateMultiBattle() {
 
+        BattleType randomBattleType = BattleType.getRandomMultiBattleType();
 
         BattleDeclaration declaration = new BattleDeclaration();
 
@@ -32,10 +32,10 @@ public class MultiBattleGenerator {
 
         List<String> homeUnits = new ArrayList<>();
 
-        while (homeUnits.size() < 5) {
-            String randomUnit = RandomUnitGenerator.getRandomUnit();
-                homeUnits.add(randomUnit);
+        for (int i = 0; i < randomBattleType.getNumber(); i++){
+            homeUnits.add(RandomUnitGenerator.getRandomUnit());
         }
+        homeEmperor.setName("Lord");
         homeEmperor.setUnits(homeUnits);
         homeEmperor.setStatPriority(StatPriority.HEALTH);
 
@@ -48,16 +48,16 @@ public class MultiBattleGenerator {
 
         List<String> awayUnits = new ArrayList<>();
 
-        while (awayUnits.size() < 5) {
-            String randomUnit = RandomUnitGenerator.getRandomUnit();
-                awayUnits.add(randomUnit);
+        for (int i = 0; i < randomBattleType.getNumber(); i++){
+            awayUnits.add(RandomUnitGenerator.getRandomUnit());
         }
+        awayEmperor.setName("King");
         awayEmperor.setUnits(awayUnits);
         awayEmperor.setStatPriority(StatPriority.HEALTH);
 
         declaration.setAwayEmperor(awayEmperor);
 
-        declaration.setBattleType(BattleType.MULTI_FIVE);
+        declaration.setBattleType(randomBattleType);
 
         LOGGER.info("Created a Multi Battle Declaration");
 
