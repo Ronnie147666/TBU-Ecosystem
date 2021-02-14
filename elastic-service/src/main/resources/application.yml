@@ -1,0 +1,7 @@
+#spring:
+#  kafka:
+#    bootstrap-servers:
+#      - 178.128.205.221:9092
+network:
+  kafka-address: 178.128.205.221:9092
+
