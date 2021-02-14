@@ -6,10 +6,10 @@ VOLUME /tmp
 
 EXPOSE 8010
 
-ARG JAR_FILE=target/TBU-0.0.1-SNAPSHOT.jar
+ARG JAR_FILE=target/tbu-service-0.0.1-SNAPSHOT.jar
 
-ADD ${JAR_FILE} TBU.jar
+ADD ${JAR_FILE} tbu-service-0.0.1-SNAPSHOT.jar
 
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/TBU.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/tbu-service-0.0.1-SNAPSHOT.jar"]
 
 
