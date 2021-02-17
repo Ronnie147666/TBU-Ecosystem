@@ -9,7 +9,7 @@
 		<version>2.1.6.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<artifactId>domain-serivce</artifactId>
+	<artifactId>domain-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Domain Service</name>
 	<packaging>jar</packaging>

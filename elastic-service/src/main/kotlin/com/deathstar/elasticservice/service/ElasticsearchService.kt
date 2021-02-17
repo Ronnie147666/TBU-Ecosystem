@@ -1,16 +1,19 @@
 package com.deathstar.elasticservice.service
 
-import org.elasticsearch.action.index.IndexRequest
-import org.elasticsearch.client.RequestOptions
-import org.elasticsearch.client.RestHighLevelClient
+import com.deathstar.elasticservice.domain.repository.ElasticsearchRepository
+import org.springframework.stereotype.Service
 
+@Service
 class ElasticsearchService(
-    private val client: RestHighLevelClient
+    private val elasticsearchRepository: ElasticsearchRepository
 ) {
 
-    private fun createIndex(index: String){
-        client.index(IndexRequest(index).create(true), RequestOptions.DEFAULT)
+    fun create(index: String, entity: Any) {
+        elasticsearchRepository.create(index, entity)
     }
 
+    fun get(index: String, id: String){
+        elasticsearchRepository.get(index, id)
+    }
 
 }

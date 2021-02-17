@@ -82,6 +82,8 @@ public class UnitService {
 
         Arrays.stream(UnitType.values()).forEach(u -> {
 
+            Unit unit = createUnit(u.getName(), null);
+
             Map<String, Double> stats = new HashMap<>();
             stats.put("hp", (double) u.getHealth());
             stats.put("physicalAtt", (double) u.getPhysicalAtt());

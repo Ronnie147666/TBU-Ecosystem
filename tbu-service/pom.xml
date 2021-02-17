@@ -21,7 +21,7 @@
 	<dependencies>
 		<dependency>
 			 <groupId>com.deathstar</groupId>
-			 <artifactId>DomainCentral</artifactId>
+			 <artifactId>domain-service</artifactId>
 			 <version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>

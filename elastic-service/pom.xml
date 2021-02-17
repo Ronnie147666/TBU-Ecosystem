@@ -52,14 +52,17 @@
 		</dependency>
 		<dependency>
 			<groupId>com.deathstar</groupId>
-			<artifactId>DomainCentral</artifactId>
+			<artifactId>domain-service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>com.fasterxml.jackson.module</groupId>
+			<artifactId>jackson-module-kotlin</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -45,7 +46,7 @@ class KafkaConsumerConfig(private val networkProperties: NetworkProperties) {
     }
 
     private val kafkaMapper: ObjectMapper = ObjectMapper()
-//        .registerKotlinModule()
+        .registerModule(KotlinModule())
         .registerModule(JavaTimeModule())
         .configure(MapperFeature.DEFAULT_VIEW_INCLUSION, false)
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
